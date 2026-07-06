@@ -35,9 +35,10 @@ services:
   mq:
     hostname: mq
     environment:
+      AFFILIATE_NAME: ${AFFILIATE_NAME:-isciii-ciber}
       MQ_USER: ${MQ_USER:?set MQ_USER in deploy/docker/.env}
       MQ_PASSWORD_HASH: ${MQ_PASSWORD_HASH:?set MQ_PASSWORD_HASH in deploy/docker/.env}
-      CEGA_CONNECTION: amqp://${CEGA_MQ_USER:?set CEGA_MQ_USER in deploy/docker/.env}:${CEGA_MQ_PASSWORD:?set CEGA_MQ_PASSWORD in deploy/docker/.env}@cega-mq:5672/%2F
+      CEGA_CONNECTION: ${CEGA_CONNECTION:?set CEGA_CONNECTION in deploy/docker/.env}
     ports:
       - "${MQ_MANAGEMENT_PORT:-15672}:15672"
     image: rabbitmq:3.11.10-management-alpine
