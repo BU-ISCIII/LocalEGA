@@ -6,16 +6,16 @@ services:
     image: localega/distribution:latest
     container_name: distribution
     ports:
-      - "2224:2223"
+      - "${DISTRIBUTION_PORT:-2224}:2223"
     networks:
       - vault
     environment:
       FUSE_DB_DSN: ${FUSE_DB_DSN:?set FUSE_DB_DSN (e.g. postgresql://distribution:${DISTRIBUTION_DB_PASSWORD:?set DISTRIBUTION_DB_PASSWORD}@vault-db:5432/ega?application_name=EGADistFS)}
     volumes:
-      - ${LOCALEGA_BASE:-/opt/LocalEGA}/vault:/opt/LocalEGA/vault:ro
-      - ${LOCALEGA_BASE:-/opt/LocalEGA}/vault.bkp:/opt/LocalEGA/vault.bkp:ro
-      - ${LOCALEGA_BASE:-/opt/LocalEGA}/etc:/opt/LocalEGA/etc
-      - ${LOCALEGA_BASE:-/opt/LocalEGA}/homes:/opt/LocalEGA/homes
+      - ${LOCALEGA_BIND_BASE:-/srv/containers/bind/localega}/vault:/opt/LocalEGA/vault:ro
+      - ${LOCALEGA_BIND_BASE:-/srv/containers/bind/localega}/vault.bkp:/opt/LocalEGA/vault.bkp:ro
+      - ${LOCALEGA_BIND_BASE:-/srv/containers/bind/localega}/etc:/opt/LocalEGA/etc
+      - ${LOCALEGA_RUNTIME_BASE:-/srv/containers/bind/localega/runtime}/homes:/opt/LocalEGA/homes
     devices:
       - /dev/fuse:/dev/fuse
     cap_add:
@@ -32,9 +32,10 @@ services:
     environment:
       SYNC_INTERVAL_SECONDS: ${SYNC_INTERVAL_SECONDS:-60}
     volumes:
-      - ${LOCALEGA_BASE:-/opt/LocalEGA}/etc:/opt/LocalEGA/etc
-      - ${LOCALEGA_BASE:-/opt/LocalEGA}/homes:/opt/LocalEGA/homes
+      - ${LOCALEGA_BIND_BASE:-/srv/containers/bind/localega}/etc:/opt/LocalEGA/etc
+      - ${LOCALEGA_RUNTIME_BASE:-/srv/containers/bind/localega/runtime}/homes:/opt/LocalEGA/homes
       - ./distribution/nss-sync.sh:/usr/local/bin/nss-sync.sh:ro
+      - ${LOCALEGA_LOG_DIR:-/var/log/local/localega/app}/nss-sync:/var/log/local/localega/app
     networks:
       - vault
     entrypoint: ["/bin/bash", "/usr/local/bin/nss-sync.sh"]
