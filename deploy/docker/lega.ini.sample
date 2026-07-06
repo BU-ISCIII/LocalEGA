@@ -19,7 +19,7 @@ location = /ega/vault
 location = /ega/vault.bkp
 
 [broker]
-connection = amqp://admin:change-me-please@mq:5672/%2F
+connection = env://LEGA_MQ_CONNECTION
 connection_name = FEGA handler
 
 # consuming from
@@ -31,7 +31,7 @@ lega_exchange = lega
 
 
 [db]
-connection = postgres://lega:change-me-please@vault-db:5432/ega?application_name=LocalEGA
+connection = env://LEGA_DB_CONNECTION
 
 dac_query = SELECT * FROM process_dac_dataset_message($1)
 # $1 is the jsonb message
@@ -67,5 +67,5 @@ filepath = /etc/ega/master.pubkey
 
 [c4gh_service_seckey]
 loader_class = C4GHFileKey
-passphrase = some-secret-passphrase
+passphrase = env://SERVICE_KEY_PASSPHRASE
 filepath = /etc/ega/service.seckey
