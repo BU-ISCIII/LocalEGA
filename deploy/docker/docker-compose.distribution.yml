@@ -10,7 +10,7 @@ services:
     networks:
       - vault
     environment:
-      FUSE_DB_DSN: ${FUSE_DB_DSN:?set FUSE_DB_DSN (e.g. postgresql://distribution:${DISTRIBUTION_DB_PASSWORD:?set DISTRIBUTION_DB_PASSWORD}@vault-db:5432/ega?application_name=EGADistFS)}
+      FUSE_DB_DSN: ${FUSE_DB_DSN:?set FUSE_DB_DSN in deploy/docker/.env}
     volumes:
       - ${LOCALEGA_DATA_BASE:-/impact_data/lega_data/lega}/vault:/opt/LocalEGA/vault:ro
       - ${LOCALEGA_DATA_BASE:-/impact_data/lega_data/lega}/vault.bkp:/opt/LocalEGA/vault.bkp:ro
