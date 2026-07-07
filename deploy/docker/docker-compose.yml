@@ -31,6 +31,7 @@ services:
     volumes:
       - ${LOCALEGA_DATA_BASE:-/impact_data/lega_data/lega}/inbox:/ega/inbox
       - ${LOCALEGA_LOG_DIR:-/var/log/local/localega/app}/inbox:/var/log/local/localega/app
+      - ./inbox-entrypoint.sh:/usr/local/bin/entrypoint.sh:ro
 
   mq:
     hostname: mq

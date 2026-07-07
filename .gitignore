@@ -20,6 +20,7 @@ deploy/docker/*
 !deploy/docker/docker-compose.yml
 !deploy/docker/docker-compose.distribution.yml
 !deploy/docker/docker-compose.distribution.yml
+!deploy/docker/inbox-entrypoint.sh
 !deploy/docker/cega
 !deploy/docker/distribution
 !deploy/docker/distribution/**
