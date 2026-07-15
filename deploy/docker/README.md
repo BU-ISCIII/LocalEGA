@@ -8,6 +8,7 @@ The master key should be stored securely.
 It requires:
 * a service key
 * a master key
+* a deployment environment file: `.env`
 * a configuration file for the python handler: `lega.ini`
 * a configuration file for docker-compose: `docker-compose.yml`
 * 2 configurations file for postgres: `pg.conf` and `pg_hba.conf`
@@ -19,13 +20,13 @@ We assume you have created a local user and a group named `lega`. If not, you ca
 
 # Sensitive data
 
-Update the configuration files with the proper settings.
+Update `.env` with the deployment-specific values. `docker-compose.yml` reads it directly, builds the internal service DSNs, and `lega.ini` resolves sensitive handler values through `env://...`.
 > Hint: copy the supplied sample files and adjust the passwords, paths, etc., appropriately.  
 
-	cp docker-compose.yml.sample           docker-compose.yml
+	cp .env.example                        .env
 	cp ../../src/vault/pg.conf.sample      pg.conf
 	cp ../../src/vault/pg_hba.conf.sample  pg_hba.conf
-	cp ../../src/handler/conf.ini.sample   lega.ini
+	cp lega.ini.sample                     lega.ini
 
 
 The included message broker uses an administrator account with
@@ -38,9 +39,9 @@ Generate the service key with:
 	chown lega service.key
 	chown lega service.key.pub
 
-Note: You will get prompted for the passphrase. Save it and update
-`lega.ini` accordingly, with the proper filepath and the chosen
-passphrase. (it is _not_ recommended _not to use_ any passphrase).
+Note: You will get prompted for the passphrase. Save it and set
+`SERVICE_KEY_PASSPHRASE` in `.env`. `lega.ini` reads it via
+`env://SERVICE_KEY_PASSPHRASE`. (it is _not_ recommended _not to use_ any passphrase).
 
 Repeat the same for the master key:
 
@@ -68,7 +69,7 @@ Prepare the storage mountpoints for:
 	chmod 700 data/staging
 	chmod 750 data/vault  # lega group needs r,x in order to distribute files
 ```
-Adjust the paths in the `docker-compose.yml` file and the `lega.ini` handler configuration.
+Adjust deployment paths in `.env`. Container-internal handler paths in `lega.ini` normally do not need to be changed.
 
 # Container images
 
@@ -97,7 +98,7 @@ commands:
 	-- To distribute data
 	ALTER ROLE distribution WITH PASSWORD 'another-strong-password';
 
-Update the handler `lega.ini` configuration file, with the `lega` user password from the database.
+Update `LEGA_DB_PASSWORD` and `DISTRIBUTION_DB_PASSWORD` in `.env` with the database passwords. Compose builds the internal connection strings for the handler and distribution service.
 
 In the `pg.conf` file, update the `crypt4gh.master_seckey` secret with the hex value of the master private key.  
 You can run the following python snippet to get it: (you need the `crypt4gh` package: `pip install crypt4gh`).
