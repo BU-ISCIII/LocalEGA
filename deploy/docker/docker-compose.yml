@@ -24,6 +24,7 @@ services:
       MQ_VERIFY_HOSTNAME: ${MQ_VERIFY_HOSTNAME:-no}
       AUTH_VERIFY_PEER: ${AUTH_VERIFY_PEER:-no}
       AUTH_VERIFY_HOSTNAME: ${AUTH_VERIFY_HOSTNAME:-no}
+      EGA_SSH_BANNER: ${EGA_SSH_BANNER:-Affiliated EGA ciber-isciii}
     ports:
       - "${INBOX_PORT:-8086}:9000"
     image: crg/fega-inbox:latest
@@ -69,6 +70,8 @@ services:
       - .env
     environment:
       LEGA_LOG: ${LEGA_LOG:-debug}
+      LEGA_MQ_CONNECTION: amqp://${MQ_USER:?set MQ_USER in deploy/docker/.env}:${MQ_PASSWORD:?set MQ_PASSWORD in deploy/docker/.env}@mq:5672/%2F
+      LEGA_DB_CONNECTION: postgres://lega:${LEGA_DB_PASSWORD:?set LEGA_DB_PASSWORD in deploy/docker/.env}@vault-db:5432/ega?application_name=LocalEGA
     volumes:
       - ./lega.ini:/etc/ega/lega.ini:ro
       - ./service.key:/etc/ega/service.seckey:ro

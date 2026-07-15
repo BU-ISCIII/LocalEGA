@@ -61,6 +61,6 @@ if [[ ! -f /opt/LocalEGA/etc/sshd/host_rsa_key ]]; then
   /opt/LocalEGA/bin/ssh-keygen -t rsa -b 3072 -N '' -f /opt/LocalEGA/etc/sshd/host_rsa_key
 fi
 
-touch /opt/LocalEGA/etc/sshd/banner
+printf '%s\n' "${EGA_SSH_BANNER:-Affiliated EGA ciber-isciii}" > /opt/LocalEGA/etc/sshd/banner
 
 exec "${SSHD_BIN}" -D -e -f "${SSHD_CONFIG}"

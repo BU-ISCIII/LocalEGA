@@ -100,7 +100,7 @@ fi
 # Permission changes are managed on the host for prepared bind mounts.
 echo "Skipping permission changes for /ega/inbox on prepared bind mount"
 
-echo 'Welcome to Local EGA Demo instance' > /etc/ega/banner
+printf '%s\n' "${EGA_SSH_BANNER:-Affiliated EGA ciber-isciii}" > /etc/ega/banner
 
 echo 'Creating rsa, dsa and ed25519 keys'
 rm -f /etc/{ega,ssh}/ssh_host_{rsa,dsa,ed25519}_key
