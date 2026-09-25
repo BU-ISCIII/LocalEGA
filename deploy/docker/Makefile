@@ -50,7 +50,7 @@ init-vault:
 ifeq ("$(wildcard pg_vault_su_password)","")
 	$(error 'Please specify the superuser password file "pg_vault_su_password"')
 endif
-	make -C ../../src/vault init DB_DATA=$(shell pwd)/data/vault-db PG_SU_PASSWORD=$(file < pg_vault_su_password)
+	make -C ../../src/vault init DB_DATA=$(shell sed -n 's/^LOCALEGA_DATA_BASE=//p' .env)/vault-db PG_SU_PASSWORD=$(file < pg_vault_su_password)
 
 # Connect to the database from the host machine
 export PGHOST=localhost
